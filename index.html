@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>neo-bpsys-wpf - 第五人格BP展示工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0067c0;
+            --primary-light: #3d8ee8;
+            --background-dark: #121212;
+            --surface-dark: #1e1e1e;
+            --surface-dark-acrylic: rgba(30, 30, 30, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-color: #9bf0e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Fluent Design 亚克力效果 */
+        .acrylic {
+            background: var(--surface-dark-acrylic);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 导航栏 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* 主视觉区域 */
+        .hero {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
+                url('preview.png')center/cover;
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .software-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .software-name {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 103, 192, 0.2);
+        }
+
+        .software-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .predecessors {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .predecessor {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .predecessor:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .project {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            transition: transform 0.3s;
+        }
+
+        .project:hover {
+            transform: translateX(10px);
+        }
+
+        .project i {
+            color: var(--accent-color);
+            flex: 0 0 40px;
+            text-align: center;
+        }
+
+        /* 用户展示区 */
+        .section-title {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--accent-color);
+        }
+
+        .user-scroll {
+            max-width: 1000px;
+            margin: 3rem auto;
+            height: 125px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        /* 添加左右渐变遮罩 */
+        .user-scroll::before,
+        .user-scroll::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 75px;
+            z-index: 1;
+        }
+
+        .user-scroll::before {
+            left: 0;
+            background: linear-gradient(to right, var(--background-dark), rgba(0, 0, 0, 0));
+        }
+
+        .user-scroll::after {
+            right: 0;
+            background: linear-gradient(to left, var(--background-dark), rgba(0, 0, 0, 0));
+        }
+
+        .user-track {
+            display: flex;
+            animation: scroll 20s linear infinite;
+        }
+
+        .user-track div {
+            flex: 0 0 150px;
+            height: 100px;
+            margin: 0 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #ccc;
+            text-align: center;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* 作者信息 */
+        .author-section {
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .author-card {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            border-radius: 16px;
+        }
+
+        .author-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .author-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border: 3px solid var(--primary-color);
+        }
+
+        .author-name {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .author-title {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .author-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .author-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .software-name {
+                font-size: 2.5rem;
+            }
+
+            .predecessors {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .author-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar acrylic">
+        <div class="nav-logo">
+            <img src="icon.png" alt="软件图标">
+            <span>neo-bpsys-wpf</span>
+        </div>
+        <div class="nav-links">
+            <a target="_blank" href="https://github.com/plfjy/neo-bpsys-wpf" class="nav-link">
+                <i class="fab fa-github"></i>
+                GitHub
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                使用文档
+            </a>
+            <a target="_blank" class="nav-link"
+                href="https://qm.qq.com/cgi-bin/qm/qr?k=k9Oe9nyA2BimwcoUsmdBzJbTIzVP3f8X&jump_from=webapi&authKey=EjAimzgLpcUHf5ypf1mQUYabxwa6nQTeVUzuDSYTSKige1MgTgfDtioILaPSsrrT">
+                <i class="fab fa-qq"></i>
+                加入QQ群
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主视觉区域 -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <img src="icon.png" alt="软件图标" class="software-icon">
+            <h1 class="software-name">neo-bpsys-wpf</h1>
+            <p class="software-desc">
+                专为第五人格直播设计的BP画面展示工具，提供专业的Ban/Pick界面和实时数据展示，<br>
+                让您的直播更加专业、高效。
+            </p>
+        </div>
+    </section>
+
+    <section class="timeline">
+        <h2 class="section-title">项目前身</h2>
+        <div class="project" onclick="window.location.href='https://github.com/plfjy/idv-bp-asg-e'">
+            <i class="fas fa-code-branch"></i>
+            <div>
+                <h3>idv-bp-asg-e</h3>
+                <p>最初的BP系统原型，采用易语言制作</p>
+            </div>
+        </div>
+        <div class="project" onclick="window.location.href='https://github.com/PLFJY/idv-fln-bp-e'">
+            <i class="fas fa-code-branch"></i>
+            <div>
+                <h3>idv-fln-bp-e</h3>
+                <p>FLN/JRL赛事定制版，基于idv-bp-asg-e</p>
+            </div>
+        </div>
+        <div class="project" onclick="window.location.href='https://github.com/plfjy/bp-sys-wpf'">
+            <i class="fas fa-code-branch"></i>
+            <div>
+                <h3>bp-sys-wpf</h3>
+                <p>WPF进行重写，功能更强大，是这个软件的前身</p>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="section-title">3个项目的所有用户</h2>
+    <section class="user-scroll">
+        <div class="user-track">
+            <div>ASG<br>(本家定制版)</div>
+            <div>MGF</div>
+            <div>IZL/CVA<br>(自改版)</div>
+            <div>FLN/JRL<br>(定制版)</div>
+            <div>IPL<br>(易语言版)</div>
+            <div>上海科技大学校内赛</div>
+            <div>PAL<br>(易语言版)</div>
+            <div>cew</div>
+            <div>广西大学杯大众赛</div>
+            <div>欧美服IEAL</div>
+            <div>IGL广州初高中联赛</div>
+            <div>东大第五人格赛事INL<br>(东北大学)</div>
+            <div>IEL星球杯</div>
+            <div>北航校内赛</div>
+            <div>GLIV</div>
+            <div>济南第五人格高中联赛</div>
+            <div>QWQ/MCY</div>
+            <div>NJUPT</div>
+            <div>上海SHISL第五人格高中生联赛<br>(定制版)</div>
+            <div>FIAC福州市高中赛</div>
+            <div>福州大学校内赛</div>
+            <div>USTC中科大校内赛<br>(中国科学技术大学)</div>
+            <div>第五人格西区杯</div>
+            <div>抖音东仔水友赛<br>(UI画面定制)</div>
+            <div>小甜甜水友赛</div>
+            <div>ACS档案馆秘闻<br>(自改版)</div>
+            <div>DZ</div>
+            <div>中南财经政法大学校内赛</div>
+            <div>江苏理工校友赛</div>
+            <div>南京师范大学校内赛</div>
+            <div>ASU</div>
+            <div>FEG复旦大学校内赛</div>
+            <div>第五人格IVF赛事</div>
+            <div>武汉高校第五人格赛事<br>(华中科技大学)</div>
+            <div>南通大学第五人格赛事</div>
+            <div>武汉理工大学校内赛</div>
+            <div>山艺第五人格赛事</div>
+            <div>USST上海理工大学校内赛</div>
+            <div>ICR第五人格联合赛事</div>
+            <div>第五人格SIV赛事</div>
+            <div>第五人格KBL赛事<br>(易语言版)</div>
+            <div>SUL苏大第五人格</div>
+            <div>第五人格ICU赛事</div>
+            <div>COH第五人格海湾校赛</div>
+            <div>EVO 赛事</div>
+            <div>IVBL</div>
+            <div>西宁市第五人格校内赛</div>
+            <div>RCE</div>
+            <div>SIV</div>
+            <div>中北大学第五人格赛事</div>
+            <div>SVA</div>
+            <div>Tsia M</div>
+            <div>THC</div>
+            <div>湖南理工友谊赛</div>
+            <div>上海海洋大学校内赛</div>
+            <div>风铃杯 X 青岛平度RE动漫游戏嘉年华</div>
+        </div>
+    </section>
+
+    <!-- 作者信息 -->
+    <section class="author-section">
+        <h2 class="section-title">作者信息</h2>
+        <div class="author-card acrylic">
+            <div class="author-header">
+                <img src="plfjy.png" alt="作者头像" class="author-avatar">
+                <h2 class="author-name">零风PLFJY</h2>
+                <p class="author-title">第五人格工具开发者 & 技术爱好者</p>
+            </div>
+
+            <p>专注于第五人格相关工具开发，致力于为玩家和主播提供更好的游戏体验和直播效果。</p>
+
+            <div class="author-links">
+                <a target="_blank" href="https://space.bilibili.com/453909624/" class="author-link">
+                    <i class="fab fa-bilibili"></i>
+                    B站主页
+                </a>
+                <a target="_blank" href="https://github.com/PLFJY/" class="author-link">
+                    <i class="fab fa-github"></i>
+                    GitHub主页
+                </a>
+                <a target="_blank" href="https://blog.plfjy.top/" class="author-link">
+                    <i class="fas fa-blog"></i>
+                    个人博客
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 确保滚动动画在页面加载后立即开始
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollElement = document.querySelector('.user-scroll');
+            const userItems = document.querySelectorAll('.user-item');
+            const itemWidth = userItems[0].offsetWidth;
+
+            // 计算总宽度并设置
+            const totalWidth = itemWidth * userItems.length;
+            scrollElement.style.width = `${totalWidth}px`;
+        });
+    </script>
+</body>
+
+</html>
