@@ -1,7 +1,0 @@
-{
-    "name": "neo-bpsys-website",
-    "assets": {
-        "directory": "./dist"
-    },
-    "main": "index.js"
-}
