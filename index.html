@@ -125,7 +125,7 @@
             border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
-        .software-name {
+        /* .software-name {
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -133,6 +133,24 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 2px 10px rgba(0, 103, 192, 0.2);
+        } */
+
+        .software-name {
+            /* 原渐变背景 */
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-color));
+
+            /* 兼容 Safari 的文本填充方式 */
+            -webkit-text-fill-color: initial;
+            /* 恢复默认文本颜色 */
+            color: var(--text-primary);
+            /* 手动指定文本颜色（如白色） */
+            /* 保留背景裁剪，但仅作为装饰（可选） */
+            -webkit-background-clip: padding-box;
+            /* 背景裁剪至内边距区域，不影响文本 */
+            background-clip: padding-box;
+
+            /* 若仍需渐变效果，可添加伪元素覆盖 */
+            position: relative;
         }
 
         .software-desc {
