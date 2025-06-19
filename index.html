@@ -396,6 +396,18 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+            .user-scroll {
+                max-width: 100%;
+                margin: 1.5rem; /* 调整边距适配小屏幕 */
+            }
+            .user-track {
+                /* 可选：缩小项目宽度以适配小屏幕 */
+                flex-wrap: nowrap; /* 确保不换行 */
+            }
+            .user-track div {
+                flex: 0 0 120px; /* 减小单个项目宽度 */
+                margin: 0 8px;
+            }
         }
     </style>
 </head>
@@ -563,15 +575,15 @@
         // 确保滚动动画在页面加载后立即开始
         document.addEventListener('DOMContentLoaded', function () {
             const scrollElement = document.querySelector('.user-scroll');
-            // 修改选择器为实际存在的类名
             const userItems = document.querySelectorAll('.user-track div');
 
             if (userItems.length > 0) {
                 const itemWidth = userItems[0].offsetWidth;
-
-                // 计算总宽度并设置
                 const totalWidth = itemWidth * userItems.length;
-                scrollElement.style.width = `${totalWidth}px`;
+                const screenWidth = window.innerWidth - 40; /* 减去边距 */
+        
+                // 限制总宽度不超过屏幕宽度（避免溢出）
+                scrollElement.style.width = Math.min(totalWidth, screenWidth) + 'px';
             }
 
             // 新增：获取最新release信息
