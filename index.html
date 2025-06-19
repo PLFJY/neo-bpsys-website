@@ -90,7 +90,7 @@
         /* 主视觉区域 */
         .hero {
             position: relative;
-            height: 80vh;
+            height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -343,6 +343,38 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* 新增下载按钮样式 */
+        .download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn .line1 {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .download-btn .line2 {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .navbar {
@@ -399,9 +431,14 @@
             <img src="icon.png" alt="软件图标" class="software-icon">
             <h1 class="software-name">neo-bpsys-wpf</h1>
             <p class="software-desc">
-                专为第五人格直播设计的BP画面展示工具，提供专业的Ban/Pick界面和实时数据展示，<br>
-                让您的直播更加专业、高效。
+                第五人格民间赛专属的直播BP展示工具<br>
+                让您的直播效果更加贴近官方
             </p>
+            <!-- 新增下载按钮 -->
+            <button id="download-button" class="download-btn">
+                <div class="line1">立即下载</div>
+                <div class="line2">获取版本中...</div>
+            </button>
         </div>
     </section>
 
@@ -526,12 +563,50 @@
         // 确保滚动动画在页面加载后立即开始
         document.addEventListener('DOMContentLoaded', function () {
             const scrollElement = document.querySelector('.user-scroll');
-            const userItems = document.querySelectorAll('.user-item');
-            const itemWidth = userItems[0].offsetWidth;
+            // 修改选择器为实际存在的类名
+            const userItems = document.querySelectorAll('.user-track div');
 
-            // 计算总宽度并设置
-            const totalWidth = itemWidth * userItems.length;
-            scrollElement.style.width = `${totalWidth}px`;
+            if (userItems.length > 0) {
+                const itemWidth = userItems[0].offsetWidth;
+
+                // 计算总宽度并设置
+                const totalWidth = itemWidth * userItems.length;
+                scrollElement.style.width = `${totalWidth}px`;
+            }
+
+            // 新增：获取最新release信息
+            const downloadButton = document.getElementById('download-button');
+            const versionLine = downloadButton.querySelector('.line2');
+
+            fetch('https://api.github.com/repos/plfjy/neo-bpsys-wpf/releases/latest', {
+                headers: {
+                    'User-Agent': 'neo-bpsys-wpf',
+                    'Accept': 'application/vnd.github+json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // 找到安装程序资产
+                    const installerAsset = data.assets.find(asset =>
+                        asset.name === 'neo-bpsys-wpf_Installer.exe');
+
+                    if (installerAsset) {
+                        versionLine.textContent = data.tag_name; // 显示版本号
+
+                        // 设置下载链接
+                        downloadButton.addEventListener('click', function () {
+                            window.location.href = 'https://ghproxy.net/' + installerAsset.browser_download_url;
+                        });
+                    } else {
+                        versionLine.textContent = '未找到安装程序';
+                        downloadButton.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('获取release失败:', error);
+                    versionLine.textContent = '获取失败';
+                    downloadButton.disabled = true;
+                });
         });
     </script>
 </body>
