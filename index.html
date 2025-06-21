@@ -356,6 +356,7 @@
             text-decoration: none;
             font-size: 1.2rem;
             text-align: center;
+            text-decoration: none;
             margin-top: 1.5rem;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -450,10 +451,10 @@
                 让您的直播效果更加贴近官方
             </p>
             <!-- 新增下载按钮 -->
-            <button id="download-button" class="download-btn">
+            <a id="download-button" href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe" class="download-btn">
                 <div class="line1">立即下载</div>
                 <div class="line2">获取版本中...</div>
-            </button>
+            </a>
         </div>
     </section>
 
@@ -608,10 +609,7 @@
                     if (installerAsset) {
                         versionLine.textContent = data.tag_name; // 显示版本号
 
-                        // 设置下载链接
-                        downloadButton.addEventListener('click', function () {
-                            window.location.href = 'https://ghproxy.net/' + installerAsset.browser_download_url;
-                        });
+                        downloadButton.href = 'https://ghproxy.net/' + installerAsset.browser_download_url;
                     } else {
                         versionLine.textContent = '未找到安装程序';
                         downloadButton.disabled = true;
