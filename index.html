@@ -624,32 +624,9 @@
                     }
                 })
                 .catch(error => {
-                    fetch('https://ghapi.plfjy.top/plfjy/neo-bpsys-wpf', {
-                        headers: {
-                            'User-Agent': 'neo-bpsys-wpf',
-                            'Accept': 'application/vnd.github+json'
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            // 找到安装程序资产
-                            const installerAsset = data.assets.find(asset =>
-                                asset.name === 'neo-bpsys-wpf_Installer.exe');
-
-                            if (installerAsset) {
-                                versionLine.textContent = data.tag_name; // 显示版本号
-
-                                downloadButton.href = 'https://gh.plfjy.top/' + installerAsset.browser_download_url;
-                            } else {
-                                versionLine.textContent = '未找到安装程序';
-                                downloadButton.disabled = true;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('获取release失败:', error);
-                            versionLine.textContent = '获取失败';
-                            downloadButton.disabled = true;
-                        });
+                    console.error('获取release失败:', error);
+                    versionLine.textContent = '获取失败';
+                    downloadButton.disabled = true;
                 });
         });
     </script>
