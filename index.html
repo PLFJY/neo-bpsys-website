@@ -207,7 +207,7 @@
         .project i {
             color: var(--accent-color);
             flex: 0 0 40px;
-            
+
             text-align: center;
         }
 
@@ -400,16 +400,22 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+
             .user-scroll {
                 max-width: 100%;
-                margin: 1.5rem; /* 调整边距适配小屏幕 */
+                margin: 1.5rem;
+                /* 调整边距适配小屏幕 */
             }
+
             .user-track {
                 /* 可选：缩小项目宽度以适配小屏幕 */
-                flex-wrap: nowrap; /* 确保不换行 */
+                flex-wrap: nowrap;
+                /* 确保不换行 */
             }
+
             .user-track div {
-                flex: 0 0 120px; /* 减小单个项目宽度 */
+                flex: 0 0 120px;
+                /* 减小单个项目宽度 */
                 margin: 0 8px;
             }
         }
@@ -451,7 +457,9 @@
                 让您的直播效果更加贴近官方
             </p>
             <!-- 新增下载按钮 -->
-            <a id="download-button" href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe" class="download-btn">
+            <a id="download-button"
+                href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                class="download-btn">
                 <div class="line1">立即下载</div>
                 <div class="line2">获取版本中...</div>
             </a>
@@ -461,21 +469,21 @@
     <section class="timeline">
         <h2 class="section-title">项目前身</h2>
         <a class="project" href='https://github.com/plfjy/idv-bp-asg-e'">
-            <i class="fas fa-code-branch"></i>
+            <i class=" fas fa-code-branch"></i>
             <div>
                 <h3>idv-bp-asg-e</h3>
                 <p>最初的BP系统原型，采用易语言制作</p>
             </div>
         </a>
         <a class="project" href='https://github.com/PLFJY/idv-fln-bp-e'">
-            <i class="fas fa-code-branch"></i>
+            <i class=" fas fa-code-branch"></i>
             <div>
                 <h3>idv-fln-bp-e</h3>
                 <p>FLN/JRL赛事定制版，基于idv-bp-asg-e</p>
             </div>
         </a>
         <a class="project" href='https://github.com/plfjy/bp-sys-wpf'">
-            <i class="fas fa-code-branch"></i>
+            <i class=" fas fa-code-branch"></i>
             <div>
                 <h3>bp-sys-wpf</h3>
                 <p>WPF进行重写，功能更强大，是这个软件的前身</p>
@@ -585,7 +593,7 @@
                 const itemWidth = userItems[0].offsetWidth;
                 const totalWidth = itemWidth * userItems.length;
                 const screenWidth = window.innerWidth - 40; /* 减去边距 */
-        
+
                 // 限制总宽度不超过屏幕宽度（避免溢出）
                 scrollElement.style.width = Math.min(totalWidth, screenWidth) + 'px';
             }
@@ -616,9 +624,32 @@
                     }
                 })
                 .catch(error => {
-                    console.error('获取release失败:', error);
-                    versionLine.textContent = '获取失败';
-                    downloadButton.disabled = true;
+                    fetch('https://ghapi.plfjy.top/plfjy/neo-bpsys-wpf', {
+                        headers: {
+                            'User-Agent': 'neo-bpsys-wpf',
+                            'Accept': 'application/vnd.github+json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // 找到安装程序资产
+                            const installerAsset = data.assets.find(asset =>
+                                asset.name === 'neo-bpsys-wpf_Installer.exe');
+
+                            if (installerAsset) {
+                                versionLine.textContent = data.tag_name; // 显示版本号
+
+                                downloadButton.href = 'https://gh.plfjy.top/' + installerAsset.browser_download_url;
+                            } else {
+                                versionLine.textContent = '未找到安装程序';
+                                downloadButton.disabled = true;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('获取release失败:', error);
+                            versionLine.textContent = '获取失败';
+                            downloadButton.disabled = true;
+                        });
                 });
         });
     </script>
