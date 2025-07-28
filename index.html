@@ -382,6 +382,33 @@
             opacity: 0.8;
         }
 
+        .download-btn2 {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .download-btn2:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn2 .line1 {
+            font-weight: bold;
+            font-size: 1.0rem;
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .navbar {
@@ -464,29 +491,30 @@
                 第五人格民间赛专属的直播BP展示工具<br>
                 让您的直播效果更加贴近官方
             </p>
-
             <a id="download-button-ghproxy-1"
                 href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
                 class="download-btn">
-                <div class="line1">Ghproxy 下载线路一</div>
+                <div class="line1">立即下载</div>
                 <div class="line2">获取版本中...</div>
             </a>
             <div class="backup-download-btn">
-                <a id="download-button-ghproxy-2"
-                    href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
-                    class="download-btn">
-                    <div class="line1">Ghproxy 线路二</div>
-                </a>
-                <a id="download-button-ghproxy-3"
-                    href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
-                    class="download-btn">
-                    <div class="line1">Ghproxy 线路三</div>
-                </a>
-                <a id="download-button-github"
-                    href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
-                    class="download-btn">
-                    <div class="line1">Github</div>
-                </a>
+                <div>
+                    <a id="download-button-ghproxy-2"
+                        href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                        class="download-btn">
+                        <div class="line1">备用线路一</div>
+                    </a>
+                    <a id="download-button-ghproxy-3"
+                        href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                        class="download-btn">
+                        <div class="line1">备用线路二</div>
+                    </a>
+                    <a id="download-button-github"
+                        href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                        class="download-btn">
+                        <div class="line1">Github (不推荐)</div>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
