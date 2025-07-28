@@ -461,11 +461,26 @@
                 让您的直播效果更加贴近官方
             </p>
             <!-- 新增下载按钮 -->
-            <a id="download-button"
+            <a id="download-button-github"
                 href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
                 class="download-btn">
-                <div class="line1">立即下载</div>
+                <div class="line1">立即下载 - Github</div>
                 <div class="line2">获取版本中...</div>
+            </a>
+            <a id="download-button-ghproxy-1"
+                href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                class="download-btn">
+                <div class="line1">立即下载 - Ghproxy 线路一</div>
+            </a>
+            <a id="download-button-ghproxy-2"
+                href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                class="download-btn">
+                <div class="line1">立即下载 - Ghproxy 线路二</div>
+            </a>
+            <a id="download-button-ghproxy-3"
+                href="https://github.com/plfjy/neo-bpsys-wpf/releases/latest/download/neo-bpsys-wpf_Installer.exe"
+                class="download-btn">
+                <div class="line1">立即下载 - Ghproxy 线路三</div>
             </a>
         </div>
     </section>
@@ -611,8 +626,11 @@
             }
 
             // 新增：获取最新release信息
-            const downloadButton = document.getElementById('download-button');
-            const versionLine = downloadButton.querySelector('.line2');
+            const downloadButton_github = document.getElementById('download-button-github');
+            const downloadButton_ghproxy_1 = document.getElementById('download-button-ghproxy-1');
+            const downloadButton_ghproxy_2 = document.getElementById('download-button-ghproxy-2');
+            const downloadButton_ghproxy_3 = document.getElementById('download-button-ghproxy-3');
+            const versionLine = downloadButton_github.querySelector('.line2');
 
             fetch('https://api.github.com/repos/plfjy/neo-bpsys-wpf/releases/latest', {
                 headers: {
@@ -629,16 +647,19 @@
                     if (installerAsset) {
                         versionLine.textContent = data.tag_name; // 显示版本号
 
-                        downloadButton.href = 'https://gh.plfjy.top/' + installerAsset.browser_download_url;
+                        downloadButton_github.href = installerAsset.browser_download_url;
+                        downloadButton_ghproxy_1.href = 'https://ghproxy.net/' + installerAsset.browser_download_url;
+                        downloadButton_ghproxy_2.href = 'https://gh.plfjy.top/' + installerAsset.browser_download_url;
+                        downloadButton_ghproxy_3.href = 'https://ghfast.top/' + installerAsset.browser_download_url;
                     } else {
                         versionLine.textContent = '未找到安装程序';
-                        downloadButton.disabled = true;
+                        downloadButton_github.disabled = true;
                     }
                 })
                 .catch(error => {
                     console.error('获取release失败:', error);
                     versionLine.textContent = '获取失败';
-                    downloadButton.disabled = true;
+                    downloadButton_github.disabled = true;
                 });
         });
     </script>
