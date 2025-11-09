@@ -225,44 +225,79 @@
             max-width: 1000px;
             margin: 3rem auto;
             height: 125px;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--surface-dark);
         }
 
-        /* 添加左右渐变遮罩 */
-        .user-scroll::before,
-        .user-scroll::after {
-            content: '';
+        /* 自定义滚动条样式 */
+        .user-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .user-scroll::-webkit-scrollbar-track {
+            background: var(--surface-dark);
+            border-radius: 3px;
+        }
+
+        .user-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .user-scroll::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* 自动隐藏滚动条 */
+        .user-scroll {
+            transition: scrollbar-color 0.3s ease;
+        }
+
+        .user-scroll:not(:hover)::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        .user-scroll:not(:hover) {
+            scrollbar-color: transparent var(--surface-dark);
+        }
+
+        /* 新的遮罩元素 - 叠在内容上方 */
+        .scroll-mask {
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 75px;
-            z-index: 1;
+            width: 120px;
+            z-index: 100;
+            pointer-events: none;
+            backdrop-filter: blur(0px); /* 确保不影响内容 */
         }
 
-        .user-scroll::before {
+        .scroll-mask-left {
             left: 0;
-            background: linear-gradient(to right, var(--background-dark), rgba(0, 0, 0, 0));
+            background: linear-gradient(to right, var(--background-dark) 0%, transparent 100%);
         }
 
-        .user-scroll::after {
+        .scroll-mask-right {
             right: 0;
-            background: linear-gradient(to left, var(--background-dark), rgba(0, 0, 0, 0));
+            background: linear-gradient(to left, var(--background-dark) 0%, transparent 100%);
         }
 
         .user-track {
             display: flex;
-            animation: scroll 15s linear infinite;
-            /* 修改此处时间值 */
+            padding: 10px;
+            gap: 10px;
+            width: max-content;
         }
 
         .user-track div {
             flex: 0 0 150px;
             height: 100px;
-            margin: 0 10px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             display: flex;
@@ -272,16 +307,12 @@
             font-size: 1.2rem;
             color: #ccc;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
+        .user-track div:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         /* 作者信息 */
@@ -447,7 +478,6 @@
             .user-track div {
                 flex: 0 0 120px;
                 /* 减小单个项目宽度 */
-                margin: 0 8px;
             }
 
             .backup-download-btn {
@@ -547,74 +577,15 @@
 
     <h2 class="section-title">庞大的用户群</h2>
     <h2 class="section-title">有过超60个民间赛事使用</h2>
-    <section class="user-scroll">
-        <div class="user-track">
-            <div>ASG<br>(本家定制版)</div>
-            <div>MGF</div>
-            <div>IZL/CVA<br>(自改版)</div>
-            <div>FLN/JRL<br>(定制版)</div>
-            <div>IPL<br>(易语言版)</div>
-            <div>上海科技大学校内赛</div>
-            <div>PAL<br>(易语言版)</div>
-            <div>cew</div>
-            <div>广西大学杯大众赛</div>
-            <div>欧美服IEAL</div>
-            <div>IGL广州初高中联赛</div>
-            <div>东大第五人格赛事INL<br>(东北大学)</div>
-            <div>IEL星球杯</div>
-            <div>北航校内赛</div>
-            <div>GLIV</div>
-            <div>济南第五人格高中联赛</div>
-            <div>QWQ/MCY</div>
-            <div>NJUPT</div>
-            <div>上海SHISL第五人格高中生联赛<br>(定制版)</div>
-            <div>FIAC福州市高中赛</div>
-            <div>福州大学校内赛</div>
-            <div>USTC中科大校内赛<br>(中国科学技术大学)</div>
-            <div>第五人格西区杯</div>
-            <div>抖音东仔水友赛<br>(UI画面定制)</div>
-            <div>小甜甜水友赛</div>
-            <div>ACS档案馆秘闻<br>(自改版)</div>
-            <div>DZ</div>
-            <div>中南财经政法大学校内赛</div>
-            <div>江苏理工校友赛</div>
-            <div>南京师范大学校内赛</div>
-            <div>ASU</div>
-            <div>FEG复旦大学校内赛</div>
-            <div>第五人格IVF赛事</div>
-            <div>武汉高校第五人格赛事<br>(华中科技大学)</div>
-            <div>南通大学第五人格赛事</div>
-            <div>武汉理工大学校内赛</div>
-            <div>山艺第五人格赛事</div>
-            <div>USST上海理工大学校内赛</div>
-            <div>ICR第五人格联合赛事</div>
-            <div>第五人格SIV赛事</div>
-            <div>第五人格KBL赛事<br>(易语言版)</div>
-            <div>SUL苏大第五人格</div>
-            <div>第五人格ICU赛事</div>
-            <div>COH第五人格海湾校赛</div>
-            <div>EVO 赛事</div>
-            <div>IVBL</div>
-            <div>西宁市第五人格校内赛</div>
-            <div>RCE</div>
-            <div>SIV</div>
-            <div>中北大学第五人格赛事</div>
-            <div>SVA</div>
-            <div>Tsia M</div>
-            <div>THC</div>
-            <div>湖南理工友谊赛</div>
-            <div>上海海洋大学校内赛</div>
-            <div>风铃杯 X 青岛平度RE动漫游戏嘉年华</div>
-            <div> 柠檬水赛事ILL, COL</div>
-            <div>第五人格KCC赛事</div>
-            <div>RCF第五人格赛事</div>
-            <div>IVX第五人格赛事</div>
-            <div>MNIL</div>
-            <div>第五人格台州市高中生邀请赛</div>
-            <div>荣漫第五人格水友赛</div>
-            <div>西南交大第五人格赛事</div>
-        </div>
-    </section>
+    <div style="position: relative; max-width: 1000px; margin: 3rem auto;">
+        <div class="scroll-mask scroll-mask-left"></div>
+        <div class="scroll-mask scroll-mask-right"></div>
+        <section class="user-scroll">
+            <div class="user-track" id="user-track">
+                <!-- 赛事项目将通过JavaScript动态生成 -->
+            </div>
+        </section>
+    </div>
 
     <!-- 作者信息 -->
     <section class="author-section">
@@ -650,19 +621,145 @@
     </section>
 
     <script>
+        // 赛事数据数组
+        const tournaments = [
+            'ASG<br>(本家定制版)',
+            'MGF',
+            'IZL/CVA<br>(自改版)',
+            'FLN/JRL<br>(定制版)',
+            'IPL<br>(易语言版)',
+            '上海科技大学校内赛',
+            'PAL<br>(易语言版)',
+            'cew',
+            '广西大学杯大众赛',
+            '欧美服IEAL',
+            'IGL广州初高中联赛',
+            '东大第五人格赛事INL<br>(东北大学)',
+            'IEL星球杯',
+            '北航校内赛',
+            'GLIV',
+            '济南第五人格高中联赛',
+            'QWQ/MCY',
+            'NJUPT',
+            '上海SHISL第五人格高中生联赛<br>(定制版)',
+            'FIAC福州市高中赛',
+            '福州大学校内赛',
+            'USTC中科大校内赛<br>(中国科学技术大学)',
+            '第五人格西区杯',
+            '抖音东仔水友赛<br>(UI画面定制)',
+            '小甜甜水友赛',
+            'ACS档案馆秘闻<br>(自改版)',
+            'DZ',
+            '中南财经政法大学校内赛',
+            '江苏理工校友赛',
+            '南京师范大学校内赛',
+            'ASU',
+            'FEG复旦大学校内赛',
+            '第五人格IVF赛事',
+            '武汉高校第五人格赛事<br>(华中科技大学)',
+            '南通大学第五人格赛事',
+            '武汉理工大学校内赛',
+            '山艺第五人格赛事',
+            'USST上海理工大学校内赛',
+            'ICR第五人格联合赛事',
+            '第五人格SIV赛事',
+            '第五人格KBL赛事<br>(易语言版)',
+            'SUL苏大第五人格',
+            '第五人格ICU赛事',
+            'COH第五人格海湾校赛',
+            'EVO 赛事',
+            'IVBL',
+            '西宁市第五人格校内赛',
+            'RCE',
+            'SIV',
+            '中北大学第五人格赛事',
+            'SVA',
+            'Tsia M',
+            'THC',
+            '湖南理工友谊赛',
+            '上海海洋大学校内赛',
+            '风铃杯 X 青岛平度RE动漫游戏嘉年华',
+            '柠檬水赛事ILL, COL',
+            '第五人格KCC赛事',
+            'RCF第五人格赛事',
+            'IVX第五人格赛事',
+            'MNIL',
+            '第五人格台州市高中生邀请赛',
+            '荣漫第五人格水友赛',
+            '西南交大第五人格赛事'
+        ];
+
+        // 动态生成赛事项目
+        function generateTournamentItems() {
+            const userTrack = document.getElementById('user-track');
+            userTrack.innerHTML = '';
+            
+            tournaments.forEach(tournament => {
+                const div = document.createElement('div');
+                div.innerHTML = tournament;
+                userTrack.appendChild(div);
+            });
+        }
+
+        // 修复的自动滚动功能
+        function setupOptimizedAutoScroll() {
+            const scrollElement = document.querySelector('.user-scroll');
+            if (!scrollElement) return; // 确保元素存在
+            
+            let isScrolling = true;
+            let scrollSpeed = 2;
+            let lastTimestamp = 0;
+            const scrollInterval = 16; // ~60fps
+            
+            function scrollStep(timestamp) {
+                if (!lastTimestamp) lastTimestamp = timestamp;
+                const delta = timestamp - lastTimestamp;
+                
+                // 控制滚动频率
+                if (delta > scrollInterval && isScrolling) {
+                    lastTimestamp = timestamp;
+                    
+                    // 直接增加scrollLeft
+                    scrollElement.scrollLeft += scrollSpeed;
+                    
+                    // 检测是否到达结尾
+                    if (scrollElement.scrollLeft >= scrollElement.scrollWidth - scrollElement.clientWidth - 30) {
+                        // 直接跳回开头，避免平滑动画
+                        scrollElement.scrollLeft = 0;
+                        lastTimestamp = 0; // 重置时间戳
+                    }
+                }
+                
+                // 继续滚动循环
+                if (isScrolling || scrollElement.scrollLeft > 0) {
+                    requestAnimationFrame(scrollStep);
+                }
+            }
+            
+            // 启动滚动
+            requestAnimationFrame(scrollStep);
+            
+            // 鼠标悬停时暂停
+            scrollElement.addEventListener('mouseenter', () => {
+                isScrolling = false;
+            });
+            
+            // 鼠标离开时恢复
+            scrollElement.addEventListener('mouseleave', () => {
+                isScrolling = true;
+                // 重新启动滚动
+                lastTimestamp = 0;
+                requestAnimationFrame(scrollStep);
+            });
+        }
+
         // 确保滚动动画在页面加载后立即开始
         document.addEventListener('DOMContentLoaded', function () {
-            const scrollElement = document.querySelector('.user-scroll');
-            const userItems = document.querySelectorAll('.user-track div');
-
-            if (userItems.length > 0) {
-                const itemWidth = userItems[0].offsetWidth;
-                const totalWidth = itemWidth * userItems.length;
-                const screenWidth = window.innerWidth - 40; /* 减去边距 */
-
-                // 限制总宽度不超过屏幕宽度（避免溢出）
-                scrollElement.style.width = Math.min(totalWidth, screenWidth) + 'px';
-            }
+            // 生成赛事项目
+            generateTournamentItems();
+            
+            // 设置优化的自动滚动
+            setupOptimizedAutoScroll();
 
             // 新增：获取最新release信息
             const downloadButton_github = document.getElementById('download-button-github');
