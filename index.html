@@ -701,39 +701,72 @@
             });
         }
 
-        // 修复的自动滚动功能
-        function setupOptimizedAutoScroll() {
+        // 增强的自动滚动功能 - 支持平滑重置动画
+        function setupEnhancedAutoScroll() {
             const scrollElement = document.querySelector('.user-scroll');
             if (!scrollElement) return; // 确保元素存在
             
             let isScrolling = true;
+            let isResetting = false; // 标记是否正在重置
             let scrollSpeed = 2;
             let lastTimestamp = 0;
-            const scrollInterval = 16; // ~60fps
+            const scrollInterval = 30; // ~60fps
             
             function scrollStep(timestamp) {
                 if (!lastTimestamp) lastTimestamp = timestamp;
                 const delta = timestamp - lastTimestamp;
                 
                 // 控制滚动频率
-                if (delta > scrollInterval && isScrolling) {
+                if (delta > scrollInterval && isScrolling && !isResetting) {
                     lastTimestamp = timestamp;
                     
                     // 直接增加scrollLeft
                     scrollElement.scrollLeft += scrollSpeed;
                     
-                    // 检测是否到达结尾
-                    if (scrollElement.scrollLeft >= scrollElement.scrollWidth - scrollElement.clientWidth - 30) {
-                        // 直接跳回开头，避免平滑动画
-                        scrollElement.scrollLeft = 0;
-                        lastTimestamp = 0; // 重置时间戳
+                    // 检测是否接近结尾
+                    if (scrollElement.scrollLeft >= scrollElement.scrollWidth - scrollElement.clientWidth - 50) {
+                        // 开始平滑重置动画
+                        startSmoothReset();
                     }
                 }
                 
                 // 继续滚动循环
-                if (isScrolling || scrollElement.scrollLeft > 0) {
+                if (isScrolling || isResetting || scrollElement.scrollLeft > 0) {
                     requestAnimationFrame(scrollStep);
                 }
+            }
+            
+            // 平滑重置到开头的动画
+            function startSmoothReset() {
+                if (isResetting) return; // 防止重复触发
+                
+                isResetting = true;
+                isScrolling = false; // 暂停自动滚动
+                
+                const startPosition = scrollElement.scrollLeft;
+                const startTime = performance.now();
+                const duration = 500; // 300ms动画时间
+                
+                function resetStep(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // 使用ease-out缓动函数
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    scrollElement.scrollLeft = startPosition * (1 - easeProgress);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(resetStep);
+                    } else {
+                        // 重置完成
+                        scrollElement.scrollLeft = 0;
+                        isResetting = false;
+                        isScrolling = true; // 恢复自动滚动
+                        lastTimestamp = 0; // 重置时间戳
+                    }
+                }
+                
+                requestAnimationFrame(resetStep);
             }
             
             // 启动滚动
@@ -741,15 +774,19 @@
             
             // 鼠标悬停时暂停
             scrollElement.addEventListener('mouseenter', () => {
-                isScrolling = false;
+                if (!isResetting) { // 重置过程中不暂停
+                    isScrolling = false;
+                }
             });
             
             // 鼠标离开时恢复
             scrollElement.addEventListener('mouseleave', () => {
-                isScrolling = true;
-                // 重新启动滚动
-                lastTimestamp = 0;
-                requestAnimationFrame(scrollStep);
+                if (!isResetting) { // 重置过程中不恢复
+                    isScrolling = true;
+                    // 重新启动滚动
+                    lastTimestamp = 0;
+                    requestAnimationFrame(scrollStep);
+                }
             });
         }
 
@@ -758,8 +795,8 @@
             // 生成赛事项目
             generateTournamentItems();
             
-            // 设置优化的自动滚动
-            setupOptimizedAutoScroll();
+            // 设置增强的自动滚动
+            setupEnhancedAutoScroll();
 
             // 新增：获取最新release信息
             const downloadButton_github = document.getElementById('download-button-github');
