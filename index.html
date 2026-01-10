@@ -401,6 +401,8 @@
             cursor: pointer;
         }
 
+        a.disabled { opacity: .5; pointer-events: none; }
+
         .download-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
@@ -828,11 +830,7 @@
             const downloadButton_ghproxy_3 = document.getElementById('download-button-ghproxy-3');
             const versionLine = downloadButton_ghproxy_1.querySelector('.line2');
 
-            fetch('https://api.github.com/repos/plfjy/neo-bpsys-wpf/releases/latest', {
-                headers: {
-                    'User-Agent': 'neo-bpsys-wpf',
-                    'Accept': 'application/vnd.github+json'
-                }
+            fetch('https://gh-releases.plfjy.top/?repo=PLFJY/neo-bpsys-wpf&latest=true&ua=neo-bpsys-wpf', {
             })
                 .then(response => response.json())
                 .then(data => {
@@ -849,13 +847,14 @@
                         downloadButton_ghproxy_3.href = 'https://ghfast.top/' + installerAsset.browser_download_url;
                     } else {
                         versionLine.textContent = '未找到安装程序';
-                        downloadButton_github.disabled = true;
+                        downloadButton_github.classList.add('disabled');
+                        downloadButton_github.setAttribute('aria-disabled', 'true');
+                        downloadButton_github.onclick = (e) => e.preventDefault();
                     }
                 })
                 .catch(error => {
                     console.error('获取release失败:', error);
                     versionLine.textContent = '获取失败';
-                    downloadButton_github.disabled = true;
                 });
         });
     </script>
