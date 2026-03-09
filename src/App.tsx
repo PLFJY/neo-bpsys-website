@@ -398,7 +398,7 @@ export default function App() {
               {copy.authorLinks.home}
             </a>
             <a target="_blank" rel="noreferrer" href="https://blog.plfjy.top/" className="author-link">
-              <Icon icon="fa6-solid:book" />
+              <Icon icon="fa6-solid:blog" />
               {copy.authorLinks.blog}
             </a>
             <a target="_blank" rel="noreferrer" href="https://space.bilibili.com/453909624/" className="author-link">
