@@ -42,7 +42,7 @@ export type Copy = {
   contributorsTitle: string;
 };
 
-export const DISCORD_LINK = "https://discord.gg/neo-bpsys";
+export const DISCORD_LINK = "https://discord.gg/xd2BdYGSYV";
 export const QQ_LINK =
   "https://qm.qq.com/cgi-bin/qm/qr?k=k9Oe9nyA2BimwcoUsmdBzJbTIzVP3f8X&jump_from=webapi&authKey=EjAimzgLpcUHf5ypf1mQUYabxwa6nQTeVUzuDSYTSKige1MgTgfDtioILaPSsrrT/";
 
