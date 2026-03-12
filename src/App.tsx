@@ -69,6 +69,7 @@ export default function App() {
   const isZh = lang === "zh";
   const roundedCount = Math.floor(tournaments.length / 10) * 10;
   const communityLink = isZh ? QQ_LINK : DISCORD_LINK;
+  const marqueeTournaments = useMemo(() => [...tournaments, ...tournaments], []);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -141,76 +142,86 @@ export default function App() {
     const scrollElement = userScrollRef.current;
     if (!scrollElement) return;
 
+    const trackElement = scrollElement.querySelector(".user-track") as HTMLDivElement | null;
+    if (!trackElement) return;
+
     let rafId = 0;
     let isScrolling = true;
-    let isResetting = false;
     let lastTimestamp = 0;
     const speed = 2;
     const interval = 30;
+    let loopWidth = trackElement.scrollWidth / 2;
+    let resumeTimer = 0;
 
-    const startSmoothReset = (el: HTMLDivElement) => {
-      if (isResetting) return;
-      isResetting = true;
-      isScrolling = false;
-
-      const startPosition = el.scrollLeft;
-      const startTime = performance.now();
-      const duration = 500;
-
-      const resetStep = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 1 - (1 - progress) ** 3;
-        el.scrollLeft = startPosition * (1 - easeProgress);
-
-        if (progress < 1) {
-          requestAnimationFrame(resetStep);
-        } else {
-          el.scrollLeft = 0;
-          isResetting = false;
-          isScrolling = true;
-          lastTimestamp = 0;
-        }
-      };
-
-      requestAnimationFrame(resetStep);
+    const refreshLoopWidth = () => {
+      loopWidth = trackElement.scrollWidth / 2;
     };
 
     const step = (timestamp: number) => {
       if (!lastTimestamp) lastTimestamp = timestamp;
       const delta = timestamp - lastTimestamp;
-      if (delta > interval && isScrolling && !isResetting) {
+      if (delta > interval && isScrolling && loopWidth > 0) {
         lastTimestamp = timestamp;
         scrollElement.scrollLeft += speed;
-        if (scrollElement.scrollLeft >= scrollElement.scrollWidth - scrollElement.clientWidth - 50) {
-          startSmoothReset(scrollElement);
+        if (scrollElement.scrollLeft >= loopWidth) {
+          scrollElement.scrollLeft -= loopWidth;
         }
       }
 
-      if (isScrolling || isResetting || scrollElement.scrollLeft > 0) {
-        rafId = requestAnimationFrame(step);
-      }
+      rafId = requestAnimationFrame(step);
     };
 
-    const onEnter = () => {
-      if (!isResetting) isScrolling = false;
+    const pauseScroll = () => {
+      isScrolling = false;
+      if (resumeTimer) {
+        window.clearTimeout(resumeTimer);
+        resumeTimer = 0;
+      }
     };
-    const onLeave = () => {
-      if (!isResetting) {
+    const resumeScroll = () => {
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
         isScrolling = true;
         lastTimestamp = 0;
-        rafId = requestAnimationFrame(step);
+      }, 900);
+    };
+    const onFocusIn = () => {
+      pauseScroll();
+    };
+    const onFocusOut = (event: FocusEvent) => {
+      const nextFocused = event.relatedTarget as Node | null;
+      if (!nextFocused || !scrollElement.contains(nextFocused)) {
+        resumeScroll();
       }
     };
 
-    scrollElement.addEventListener("mouseenter", onEnter);
-    scrollElement.addEventListener("mouseleave", onLeave);
+    refreshLoopWidth();
+
+    const resizeObserver = new ResizeObserver(() => {
+      refreshLoopWidth();
+    });
+    resizeObserver.observe(trackElement);
+
+    scrollElement.addEventListener("mouseenter", pauseScroll);
+    scrollElement.addEventListener("mouseleave", resumeScroll);
+    scrollElement.addEventListener("touchstart", pauseScroll, { passive: true });
+    scrollElement.addEventListener("touchend", resumeScroll, { passive: true });
+    scrollElement.addEventListener("touchcancel", resumeScroll, { passive: true });
+    scrollElement.addEventListener("focusin", onFocusIn);
+    scrollElement.addEventListener("focusout", onFocusOut);
     rafId = requestAnimationFrame(step);
 
     return () => {
       cancelAnimationFrame(rafId);
-      scrollElement.removeEventListener("mouseenter", onEnter);
-      scrollElement.removeEventListener("mouseleave", onLeave);
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      resizeObserver.disconnect();
+      scrollElement.removeEventListener("mouseenter", pauseScroll);
+      scrollElement.removeEventListener("mouseleave", resumeScroll);
+      scrollElement.removeEventListener("touchstart", pauseScroll);
+      scrollElement.removeEventListener("touchend", resumeScroll);
+      scrollElement.removeEventListener("touchcancel", resumeScroll);
+      scrollElement.removeEventListener("focusin", onFocusIn);
+      scrollElement.removeEventListener("focusout", onFocusOut);
     };
   }, []);
 
@@ -374,8 +385,8 @@ export default function App() {
         <div className="scroll-mask scroll-mask-right" />
         <section className="user-scroll" ref={userScrollRef}>
           <div className="user-track">
-            {tournaments.map((tournament) => (
-              <div key={tournament} dangerouslySetInnerHTML={{ __html: tournament }} />
+            {marqueeTournaments.map((tournament, index) => (
+              <div key={`${tournament}-${index}`} dangerouslySetInnerHTML={{ __html: tournament }} />
             ))}
           </div>
         </section>
