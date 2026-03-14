@@ -381,6 +381,41 @@ html[data-theme="light"] .hero-bg::before {
   color: var(--accent-color);
 }
 
+.promo-section {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.promo-card {
+  padding: 1.25rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--surface-dark) 88%, transparent);
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.promo-embed {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.promo-embed iframe,
+.promo-embed video,
+.promo-embed embed,
+.promo-embed object {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: min(56.25vw, 560px);
+  border: 0;
+}
+
+html[data-theme="light"] .promo-card {
+  background: #f8fbff;
+  border: 1px solid rgba(19, 32, 51, 0.1);
+  box-shadow: 0 10px 24px rgba(22, 44, 78, 0.12);
+}
+
 .timeline {
   max-width: 1000px;
   margin: 3rem auto;

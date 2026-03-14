@@ -40,6 +40,27 @@ export type Copy = {
     github: string;
   };
   contributorsTitle: string;
+  partnersTitle: string;
+  partnerWebsiteLabel: string;
+};
+
+export type Contributor = {
+  avatar: string;
+  name: string;
+  contribution: string;
+  link: string;
+};
+
+export type Partner = {
+  avatar: string;
+  name: string;
+  description: string;
+  link: string;
+};
+
+export type PromoEmbed = {
+  title: string;
+  embedHtml: string;
 };
 
 export const DISCORD_LINK = "https://discord.gg/xd2BdYGSYV";
@@ -103,6 +124,8 @@ export const copyByLang: Record<Lang, Copy> = {
       github: "GitHub主页",
     },
     contributorsTitle: "贡献者",
+    partnersTitle: "合作伙伴",
+    partnerWebsiteLabel: "官网",
   },
   en: {
     title: "neo-bpsys-wpf - Identity V BP Display Tool",
@@ -160,6 +183,8 @@ export const copyByLang: Record<Lang, Copy> = {
       github: "GitHub",
     },
     contributorsTitle: "Contributors",
+    partnersTitle: "Partners",
+    partnerWebsiteLabel: "Website",
   },
   ja: {
     title: "neo-bpsys-wpf - 第五人格BP表示ツール",
@@ -217,10 +242,12 @@ export const copyByLang: Record<Lang, Copy> = {
       github: "GitHub",
     },
     contributorsTitle: "貢献者",
+    partnersTitle: "パートナー",
+    partnerWebsiteLabel: "公式サイト",
   },
 };
 
-export const contributors = [
+export const contributors: Contributor[] = [
   {
     avatar: "/assets/avatars/zack.jpg",
     name: "Zack",
@@ -246,6 +273,39 @@ export const contributors = [
     link: "",
   },
 ];
+
+export const partners: Partner[] = [
+  {
+    avatar: "https://idvevent.cn/logo.svg",
+    name: "第五人格统一赛事平台",
+    description: "面向所有主办方的赛事创建、报名审核、赛程管理一体化平台。",
+    link: "https://idvevent.cn/"
+  },
+  {
+    avatar: "https://free.picui.cn/free/2026/01/05/695b7d4c1dea1.jpg",
+    name: "第五人格 ASG 赛事",
+    description: "让每一个电竞梦都有自己的舞台<br>官方 QQ 群：456414070",
+    link: ""
+  }
+];
+
+export const promoByLang: Record<Lang, PromoEmbed | null> = {
+  zh: {
+    title: "功能演示",
+    embedHtml:
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114926647512740&bvid=BV1Lq83zQEa2&cid=31324898032&autoplay=false&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+  },
+  en: {
+    title: "Feature Demo",
+    embedHtml:
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114926647512740&bvid=BV1Lq83zQEa2&cid=31324898032&autoplay=false&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+  },
+  ja: {
+    title: "機能デモ",
+    embedHtml:
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114926647512740&bvid=BV1Lq83zQEa2&cid=31324898032&autoplay=false&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+  },
+};
 
 export const tournaments = [
   "ASG<br>(本家定制版)",
