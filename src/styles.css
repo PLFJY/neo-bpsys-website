@@ -395,18 +395,21 @@ html[data-theme="light"] .hero-bg::before {
 }
 
 .promo-embed {
+  position: relative;
   overflow: hidden;
   border-radius: 12px;
+  aspect-ratio: 16 / 9;
 }
 
 .promo-embed iframe,
 .promo-embed video,
 .promo-embed embed,
 .promo-embed object {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  max-width: 100%;
-  min-height: min(56.25vw, 560px);
+  height: 100%;
   border: 0;
 }
 
