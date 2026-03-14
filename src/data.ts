@@ -293,17 +293,17 @@ export const promoByLang: Record<Lang, PromoEmbed | null> = {
   zh: {
     title: "功能演示",
     embedHtml:
-      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&muted=true" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&autoplay=false" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
   },
   en: {
     title: "Feature Demo",
     embedHtml:
-      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&muted=true" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&autoplay=false" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
   },
   ja: {
     title: "機能デモ",
     embedHtml:
-      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&muted=true" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+      '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=BV1Lq83zQEa2&autoplay=false" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
   },
 };
 
