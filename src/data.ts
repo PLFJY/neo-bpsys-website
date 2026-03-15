@@ -275,7 +275,7 @@ export const contributors: Contributor[] = [
   {
     avatar: "/assets/avatars/paperwings.PNG",
     name: "paperwings",
-    contribution: "提供了强大的 3D 插件 Provide 3D Plugin support"
+    contribution: "提供了强大的 3D 插件 Provide 3D Plugin support",
     link: "https://github.com/jefcrb"
   }
 ];
