@@ -272,6 +272,12 @@ export const contributors: Contributor[] = [
     contribution: "提供了 v2.0 版本的默认前台 UI",
     link: "",
   },
+  {
+    avatar: "/assets/avatars/paperwings.PNG",
+    name: "paperwings",
+    contribution: "提供了强大的 3D 插件 Provide 3D Plugin support"
+    link: "https://github.com/jefcrb"
+  }
 ];
 
 export const partners: Partner[] = [
