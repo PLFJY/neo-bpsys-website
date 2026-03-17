@@ -6,6 +6,20 @@ type ContributorsSectionProps = {
   contributors: Contributor[];
 };
 
+function renderContribution(contribution: string) {
+  const lines = contribution
+    .split(/\n|<br\s*\/?>|<\/br>/gi)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return lines.map((line, index) => (
+    <span key={`${line}-${index}`}>
+      {index > 0 && <br />}
+      {line}
+    </span>
+  ));
+}
+
 export function ContributorsSection({ title, contributors }: ContributorsSectionProps) {
   return (
     <section className="contributors">
@@ -15,7 +29,7 @@ export function ContributorsSection({ title, contributors }: ContributorsSection
           <div key={contributor.name} className="contributor-item">
             <img className="contributor-avatar" src={contributor.avatar} alt={contributor.name} loading="lazy" />
             <div className="contributor-name">{contributor.name}</div>
-            <div className="contributor-contribution">{contributor.contribution}</div>
+            <div className="contributor-contribution">{renderContribution(contributor.contribution)}</div>
             {contributor.link && (
               <a href={contributor.link} target="_blank" rel="noreferrer" className="contributor-link">
                 <Icon icon="fa6-brands:github" />
