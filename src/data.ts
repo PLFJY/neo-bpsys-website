@@ -415,5 +415,6 @@ export const tournaments = [
   "广东财经大学",
   "温州医科大学校内赛",
   "第五人格湛江市高中邀请赛",
-  "Europe League"
+  "Europe League",
+  "哈皮杯<br>(比分模块)"
 ];
